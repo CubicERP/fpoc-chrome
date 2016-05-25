@@ -9,6 +9,7 @@ var epson_e_ar = function(interface, sequence) {
     this.ackbuf = new Uint8Array([0x06]);
     this.common = this.ar.common;
     this.protocol = 'epson_e_ar';
+    this.ticket_ids = {};
 
     // Values | Enums
     this.speed = {
@@ -1538,7 +1539,7 @@ var epson_e_ar = function(interface, sequence) {
     // API: Make ticket factura.
     this.make_ticket_factura  = function(options, ticket, callback) {
         var self = this;
-
+		var ticket_id = ticket.ticket_id;
         var callback_cancel_ticket_factura = function(ret) {
             ret = ret || {};
             ret.error = 'ticket canceled'
@@ -1650,6 +1651,7 @@ var epson_e_ar = function(interface, sequence) {
                 console.error(res.strResult);
                 self._cancel_ticket_factura(callback_cancel_ticket_factura);
             } else {
+                self.ticket_ids[ticket_id] = 'printed';
                 callback(res);
             }
             });

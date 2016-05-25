@@ -182,7 +182,10 @@ printer_server_events = {
         var printer_id = event_data.name;
         if (typeof printers == 'object' && printer_id in printers) {
             var printer = printers[printer_id];
-            printer.make_ticket_factura(
+            if (event_data['ticket'] && event_data['ticket']['ticket_id'] in printer.ticket_ids) {
+            	console.log("Repeated ticket_id. Ignore it.");
+        	} else {
+            	printer.make_ticket_factura(
                     event_data['options'],
                     event_data['ticket'],
                     function(res){
@@ -191,6 +194,7 @@ printer_server_events = {
                         response['printer_id'] = printer_id;
                         session.send(response,callback);
                     });
+            }
         }
     },
     'cancel_ticket_notacredito': function(session, event_id, event_data, printers, callback) {
