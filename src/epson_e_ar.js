@@ -1651,7 +1651,9 @@ var epson_e_ar = function(interface, sequence) {
                 console.error(res.strResult);
                 self._cancel_ticket_factura(callback_cancel_ticket_factura);
             } else {
-                self.ticket_ids[ticket_id] = 'printed';
+                if (ticket_id) {
+                    self.ticket_ids[ticket_id] = 'printed';
+                }
                 callback(res);
             }
             });
