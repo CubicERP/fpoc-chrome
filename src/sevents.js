@@ -184,6 +184,10 @@ printer_server_events = {
             var printer = printers[printer_id];
             if (event_data['ticket'] && event_data['ticket']['ticket_id'] in printer.ticket_ids) {
             	console.log("Repeated ticket_id. Ignore it.");
+            	response = {'error': 'duplicate ticket'};
+                response['event_id'] = event_id;
+                response['printer_id'] = printer_id;
+                session.send(response,callback);
         	} else {
             	printer.make_ticket_factura(
                     event_data['options'],
